@@ -1,0 +1,14 @@
+{
+  "invalidUser": {
+    "email": "usuario.invalido@lumefood.test",
+    "password": "senha-invalida"
+  },
+  "validUser": {
+    "name": "Cliente Login",
+    "password": "teste123"
+  },
+  "newUser": {
+    "name": "Cliente Teste",
+    "password": "teste123"
+  }
+}
