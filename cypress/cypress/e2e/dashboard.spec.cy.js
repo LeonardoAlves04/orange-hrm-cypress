@@ -35,6 +35,11 @@ describe("Dashboard Tests", () => {
     cy.url().should("include", "/leave");
   });
 
+  it("Dashboard - Navigate to Time", () => {
+    menuPage.acessTime();
+    cy.url().should("include", "/time");
+  });
+
   it("Dashboard - Navigate to Admin", () => {
     menuPage.acessAdmin();
     cy.url().should("include", "/admin");
@@ -48,6 +53,31 @@ describe("Dashboard Tests", () => {
   it("Dashboard - Navigate to Performance", () => {
     menuPage.acessPerformance();
     cy.url().should("include", "/performance");
+  });
+
+  it("Dashboard - Navigate to My Info", () => {
+    menuPage.acessMyInfo();
+    cy.url().should("include", "/pim/viewMyDetails");
+  });
+
+  it("Dashboard - Navigate to Directory", () => {
+    menuPage.acessDirectory();
+    cy.url().should("include", "/directory");
+  });
+
+  it("Dashboard - Navigate to Claim", () => {
+    menuPage.acessClaim();
+    cy.url().should("include", "/claim");
+  });
+
+  it("Dashboard - Navigate to Buzz", () => {
+    menuPage.acessBuzz();
+    cy.url().should("include", "/buzz");
+  });
+
+  it("Dashboard - Navigate to Maintenance", () => {
+    menuPage.acessMaintenance();
+    cy.url().should("include", "/maintenance");
   });
 
   it("Dashboard - User Dropdown Options Visible", () => {

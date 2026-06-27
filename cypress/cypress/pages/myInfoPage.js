@@ -13,9 +13,26 @@ class MyInfoPage {
       submitButton: "[type='submit']",
       textInput: ".oxd-select-text-input",
       radioInput: ".oxd-radio-input",
+      pageTitle: "h6.oxd-text--h6",
+      sideNavigationLink: ".orangehrm-tabs-item",
     };
 
     return selectors;
+  }
+
+  checkPersonalDetailsPage() {
+    cy.url().should("include", "/viewPersonalDetails");
+    cy.get(this.selectorsList().pageTitle)
+      .contains("Personal Details")
+      .should("be.visible");
+  }
+
+  openSideNavigationItem(item) {
+    cy.contains(this.selectorsList().sideNavigationLink, item).click();
+  }
+
+  checkSectionTitle(title) {
+    cy.get(this.selectorsList().pageTitle).contains(title).should("be.visible");
   }
 
   fillPersonalDetails(firstName, middleName, lastName) {

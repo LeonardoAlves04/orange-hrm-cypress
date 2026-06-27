@@ -10,7 +10,11 @@ class MenuPage {
         "[href='/web/index.php/recruitment/viewRecruitmentModule']",
       performanceButton:
         "[href='/web/index.php/performance/viewPerformanceModule']",
+      dashboardButton: "[href='/web/index.php/dashboard/index']",
       directoryButton: "[href='/web/index.php/directory/viewDirectory']",
+      maintenanceButton:
+        "[href='/web/index.php/maintenance/viewMaintenanceModule']",
+      claimButton: "[href='/web/index.php/claim/viewClaimModule']",
       buzzButton: "[href='/web/index.php/buzz/viewBuzz']",
     };
 
@@ -53,14 +57,31 @@ class MenuPage {
     cy.get(this.selectorsList().buzzButton).click();
   }
 
+  acessDashboard() {
+    cy.get(this.selectorsList().dashboardButton).click();
+  }
+
+  acessMaintenance() {
+    cy.get(this.selectorsList().maintenanceButton).click();
+  }
+
+  acessClaim() {
+    cy.get(this.selectorsList().claimButton).click();
+  }
+
   checkAllMenuItemsVisible() {
     const items = [
       "adminButton",
       "pimButton",
       "leaveButton",
+      "timeButton",
       "recruitmentButton",
+      "myInfoButton",
       "performanceButton",
+      "dashboardButton",
       "directoryButton",
+      "maintenanceButton",
+      "claimButton",
       "buzzButton",
     ];
     items.forEach((key) => {
