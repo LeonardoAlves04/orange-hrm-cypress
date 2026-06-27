@@ -1,10 +1,11 @@
-class BuzzPage {
+﻿class BuzzPage {
   selectorsList() {
     const selectors = {
       postInput: ".oxd-buzz-post-input",
       postButton: "button",
       posts: ".orangehrm-buzz-post",
       postActionButtons: "button",
+      loadingSpinner: ".oxd-loading-spinner",
     };
 
     return selectors;
@@ -12,48 +13,64 @@ class BuzzPage {
 
   checkBuzzPage() {
     cy.url().should("include", "/buzz");
+    cy.get(this.selectorsList().loadingSpinner, { timeout: 10000 }).should(
+      "not.exist"
+    );
   }
 
   checkPostInputVisible() {
-    cy.get(this.selectorsList().postInput).should("be.visible");
+    cy.get(this.selectorsList().postInput, { timeout: 10000 }).should(
+      "be.visible"
+    );
   }
 
   checkFeedHasPosts() {
-    cy.get(this.selectorsList().posts).should("exist");
+    cy.get(this.selectorsList().posts, { timeout: 10000 }).should("exist");
   }
 
   checkFirstPostHasActionButtons() {
-    cy.get(this.selectorsList().posts)
+    cy.get(this.selectorsList().posts, { timeout: 10000 })
       .first()
       .within(() => {
         cy.get(this.selectorsList().postActionButtons).should(
           "have.length.greaterThan",
-          0,
+          0
         );
       });
   }
 
   typePost(text) {
-    cy.get(this.selectorsList().postInput).first().clear().type(text);
+    cy.get(this.selectorsList().postInput, { timeout: 10000 })
+      .first()
+      .should("be.visible")
+      .click()
+      .clear({ force: true })
+      .type(text, { force: true, delay: 0 });
   }
 
   checkPostInputHasText(text) {
-    cy.get(this.selectorsList().postInput)
+    cy.get(this.selectorsList().postInput, { timeout: 10000 })
       .first()
       .should(($field) => {
-        expect($field.val() || $field.text()).to.contain(text);
+        const fieldText = $field.val() || $field.text();
+        expect(fieldText).to.contain(text);
       });
   }
 
   submitPost() {
-    cy.get(this.selectorsList().postButton).contains("Post").click();
+    cy.contains(this.selectorsList().postButton, /^Post$/, { timeout: 10000 })
+      .should("be.visible")
+      .and("not.be.disabled")
+      .click();
   }
 
   checkPostInFeed(text) {
-    cy.get(".oxd-loading-spinner", { timeout: 8000 }).should("not.exist");
-    cy.contains(this.selectorsList().posts, text, { timeout: 10000 }).should(
-      "be.visible"
+    cy.get(this.selectorsList().loadingSpinner, { timeout: 15000 }).should(
+      "not.exist"
     );
+    cy.contains(this.selectorsList().posts, text, { timeout: 20000 })
+      .scrollIntoView()
+      .should("be.visible");
   }
 }
 

@@ -1,91 +1,101 @@
-class MenuPage {
+﻿class MenuPage {
   selectorsList() {
     const selectors = {
-      myInfoButton: "[href='/web/index.php/pim/viewMyDetails']",
-      adminButton: "[href='/web/index.php/admin/viewAdminModule']",
-      pimButton: "[href='/web/index.php/pim/viewPimModule']",
-      leaveButton: "[href='/web/index.php/leave/viewLeaveModule']",
-      timeButton: "[href='/web/index.php/time/viewTimeModule']",
-      recruitmentButton:
-        "[href='/web/index.php/recruitment/viewRecruitmentModule']",
-      performanceButton:
-        "[href='/web/index.php/performance/viewPerformanceModule']",
-      dashboardButton: "[href='/web/index.php/dashboard/index']",
-      directoryButton: "[href='/web/index.php/directory/viewDirectory']",
-      maintenanceButton:
-        "[href='/web/index.php/maintenance/viewMaintenanceModule']",
-      claimButton: "[href='/web/index.php/claim/viewClaimModule']",
-      buzzButton: "[href='/web/index.php/buzz/viewBuzz']",
+      menuItem: "a.oxd-main-menu-item",
+      myInfoButton: "[href*='/pim/viewMyDetails']",
+      adminButton: "[href*='/admin/viewAdminModule']",
+      pimButton: "[href*='/pim/viewPimModule']",
+      leaveButton: "[href*='/leave/viewLeaveModule']",
+      timeButton: "[href*='/time/viewTimeModule']",
+      recruitmentButton: "[href*='/recruitment/viewRecruitmentModule']",
+      performanceButton: "[href*='/performance/viewPerformanceModule']",
+      dashboardButton: "[href*='/dashboard/index']",
+      directoryButton: "[href*='/directory/viewDirectory']",
+      maintenanceButton: "[href*='/maintenance/viewMaintenanceModule']",
+      claimButton: "[href*='/claim/viewClaimModule']",
+      buzzButton: "[href*='/buzz/viewBuzz']",
+      loadingSpinner: ".oxd-loading-spinner",
     };
 
     return selectors;
   }
 
+  clickMenuItem(label) {
+    cy.contains(this.selectorsList().menuItem, label, { timeout: 10000 })
+      .should("be.visible")
+      .scrollIntoView()
+      .click();
+    cy.get(this.selectorsList().loadingSpinner, { timeout: 10000 }).should(
+      "not.exist"
+    );
+  }
+
   acessMyInfo() {
-    cy.get(this.selectorsList().myInfoButton).click();
+    this.clickMenuItem("My Info");
   }
 
   acessAdmin() {
-    cy.get(this.selectorsList().adminButton).click();
+    this.clickMenuItem("Admin");
   }
 
   acessPim() {
-    cy.get(this.selectorsList().pimButton).click();
+    this.clickMenuItem("PIM");
   }
 
   acessLeave() {
-    cy.get(this.selectorsList().leaveButton).click();
+    this.clickMenuItem("Leave");
   }
 
   acessTime() {
-    cy.get(this.selectorsList().timeButton).click();
+    this.clickMenuItem("Time");
   }
 
   acessRecruitment() {
-    cy.get(this.selectorsList().recruitmentButton).click();
+    this.clickMenuItem("Recruitment");
   }
 
   acessPerformance() {
-    cy.get(this.selectorsList().performanceButton).click();
+    this.clickMenuItem("Performance");
   }
 
   acessDirectory() {
-    cy.get(this.selectorsList().directoryButton).click();
+    this.clickMenuItem("Directory");
   }
 
   acessBuzz() {
-    cy.get(this.selectorsList().buzzButton).click();
+    this.clickMenuItem("Buzz");
   }
 
   acessDashboard() {
-    cy.get(this.selectorsList().dashboardButton).click();
+    this.clickMenuItem("Dashboard");
   }
 
   acessMaintenance() {
-    cy.get(this.selectorsList().maintenanceButton).click();
+    this.clickMenuItem("Maintenance");
   }
 
   acessClaim() {
-    cy.get(this.selectorsList().claimButton).click();
+    this.clickMenuItem("Claim");
   }
 
   checkAllMenuItemsVisible() {
     const items = [
-      "adminButton",
-      "pimButton",
-      "leaveButton",
-      "timeButton",
-      "recruitmentButton",
-      "myInfoButton",
-      "performanceButton",
-      "dashboardButton",
-      "directoryButton",
-      "maintenanceButton",
-      "claimButton",
-      "buzzButton",
+      "Admin",
+      "PIM",
+      "Leave",
+      "Time",
+      "Recruitment",
+      "My Info",
+      "Performance",
+      "Dashboard",
+      "Directory",
+      "Maintenance",
+      "Claim",
+      "Buzz",
     ];
-    items.forEach((key) => {
-      cy.get(this.selectorsList()[key]).should("be.visible");
+
+    items.forEach((label) => {
+      cy.contains(this.selectorsList().menuItem, label).should("be.visible");
     });
   }
 }
