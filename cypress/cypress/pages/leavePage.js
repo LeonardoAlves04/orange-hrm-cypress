@@ -21,7 +21,7 @@
   checkLeaveListPage() {
     cy.url().should("include", "/leave");
     cy.get(this.selectorsList().leaveTable, { timeout: 10000 }).should(
-      "be.visible"
+      "be.visible",
     );
   }
 
@@ -39,19 +39,20 @@
       timeout: 10000,
     }).should("be.visible");
     cy.get(this.selectorsList().leaveTable, { timeout: 10000 }).should(
-      "be.visible"
+      "be.visible",
     );
   }
 
   waitForApplyLeaveForm() {
     cy.get(this.selectorsList().loadingSpinner, { timeout: 10000 }).should(
-      "not.exist"
+      "not.exist",
     );
     cy.get("body", { timeout: 10000 }).should(($body) => {
-      const hasCommentField = $body.find(this.selectorsList().commentField).length > 0;
-      const hasNoBalanceMessage = $body.text().includes(
-        this.selectorsList().noLeaveBalanceText
-      );
+      const hasCommentField =
+        $body.find(this.selectorsList().commentField).length > 0;
+      const hasNoBalanceMessage = $body
+        .text()
+        .includes(this.selectorsList().noLeaveBalanceText);
       expect(hasCommentField || hasNoBalanceMessage).to.equal(true);
     });
   }
@@ -95,7 +96,9 @@
           .clear({ force: true })
           .type(comment, { force: true, delay: 0 });
       } else {
-        cy.contains(this.selectorsList().noLeaveBalanceText).should("be.visible");
+        cy.contains(this.selectorsList().noLeaveBalanceText).should(
+          "be.visible",
+        );
       }
     });
   }
@@ -109,7 +112,9 @@
           .and("not.be.disabled")
           .click();
       } else {
-        cy.contains(this.selectorsList().noLeaveBalanceText).should("be.visible");
+        cy.contains(this.selectorsList().noLeaveBalanceText).should(
+          "be.visible",
+        );
       }
     });
   }
@@ -120,10 +125,12 @@
       if (hasForm) {
         cy.contains(this.selectorsList().resetButton, "Reset")
           .should("be.visible")
-          .click();
+          .click({ timeout: 10000 });
         cy.get(this.selectorsList().commentField).should("have.value", "");
       } else {
-        cy.contains(this.selectorsList().noLeaveBalanceText).should("be.visible");
+        cy.contains(this.selectorsList().noLeaveBalanceText).should(
+          "be.visible",
+        );
       }
     });
   }
@@ -134,10 +141,12 @@
       if ($body.find(this.selectorsList().errorMessage).length) {
         cy.get(this.selectorsList().errorMessage).should(
           "have.length.greaterThan",
-          0
+          0,
         );
       } else {
-        cy.contains(this.selectorsList().noLeaveBalanceText).should("be.visible");
+        cy.contains(this.selectorsList().noLeaveBalanceText).should(
+          "be.visible",
+        );
       }
     });
   }
@@ -145,14 +154,14 @@
   runSearchFilter() {
     cy.get(this.selectorsList().applyButton).should("be.visible").click();
     cy.get(this.selectorsList().loadingSpinner, { timeout: 10000 }).should(
-      "not.exist"
+      "not.exist",
     );
   }
 
   resetSearchFilter() {
     cy.get(this.selectorsList().resetButton).should("be.visible").click();
     cy.get(this.selectorsList().loadingSpinner, { timeout: 10000 }).should(
-      "not.exist"
+      "not.exist",
     );
   }
 }

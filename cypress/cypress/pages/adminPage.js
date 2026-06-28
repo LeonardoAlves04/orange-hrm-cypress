@@ -17,6 +17,9 @@ class AdminPage {
       topbarNavItem: ".oxd-topbar-body-nav-tab",
       dropdownMenu: ".oxd-dropdown-menu",
       dropdownItem: ".oxd-dropdown-menu a",
+      autocompleteInput: ".oxd-autocomplete-text-input input",
+      autocompleteOption: ".oxd-autocomplete-dropdown [role='option']",
+      passwordField: "input[type='password']",
     };
 
     return selectors;
@@ -71,6 +74,65 @@ class AdminPage {
       "have.length.greaterThan",
       0,
     );
+  }
+
+
+  selectUserRole(role) {
+    cy.contains(".oxd-input-group", "User Role")
+      .find(this.selectorsList().userRoleDropdown)
+      .click();
+    cy.get(".oxd-select-dropdown").contains(role).click();
+  }
+
+  selectStatus(status) {
+    cy.contains(".oxd-input-group", "Status")
+      .find(this.selectorsList().userRoleDropdown)
+      .click();
+    cy.get(".oxd-select-dropdown").contains(status).click();
+  }
+
+  selectEmployee(employeeName) {
+    cy.get(this.selectorsList().autocompleteInput)
+      .should("be.visible")
+      .clear()
+      .type(employeeName);
+    cy.get(this.selectorsList().autocompleteOption, { timeout: 10000 })
+      .contains(employeeName)
+      .click();
+  }
+
+  fillUserForm({ role, employeeName, status, username, password }) {
+    this.selectUserRole(role);
+    this.selectEmployee(employeeName);
+    this.selectStatus(status);
+    cy.contains(".oxd-input-group", "Username")
+      .find("input")
+      .clear()
+      .type(username);
+    cy.get(this.selectorsList().passwordField).eq(0).clear().type(password);
+    cy.get(this.selectorsList().passwordField).eq(1).clear().type(password);
+  }
+
+  saveForm() {
+    cy.get(this.selectorsList().submitButton)
+      .should("be.visible")
+      .and("not.be.disabled")
+      .click();
+    cy.get(this.selectorsList().successToast, { timeout: 10000 }).should(
+      "be.visible",
+    );
+    cy.get(".oxd-loading-spinner", { timeout: 10000 }).should("not.exist");
+  }
+
+  checkUserInTable(username, role, status) {
+    cy.get(this.selectorsList().tableRows, { timeout: 10000 })
+      .should("have.length.greaterThan", 0)
+      .then(($rows) => {
+        const rowsText = $rows.text().replace(/\s+/g, " ");
+        expect(rowsText).to.contain(username);
+        expect(rowsText).to.contain(role);
+        expect(rowsText).to.contain(status);
+      });
   }
 
   cancelForm() {

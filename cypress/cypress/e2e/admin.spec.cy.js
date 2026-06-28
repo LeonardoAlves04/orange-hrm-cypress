@@ -3,11 +3,16 @@ import LoginPage from "../pages/loginPage";
 import DashboardPage from "../pages/dashboardPage";
 import MenuPage from "../pages/menuPage";
 import AdminPage from "../pages/adminPage";
+import PimPage from "../pages/pimPage";
 
+const Chance = require("chance");
+
+const chance = new Chance();
 const loginPage = new LoginPage();
 const dashboardPage = new DashboardPage();
 const menuPage = new MenuPage();
 const adminPage = new AdminPage();
+const pimPage = new PimPage();
 
 describe("Admin Tests", () => {
   beforeEach(() => {
@@ -52,6 +57,37 @@ describe("Admin Tests", () => {
     adminPage.cancelForm();
   });
 
+
+  it("Admin - Create User for Existing Employee and Search by Username", () => {
+    const firstName = `Qa${chance.first()}`;
+    const middleName = chance.string({ length: 5, alpha: true });
+    const lastName = chance.last();
+    const employeeId = chance.string({ length: 6, pool: "0123456789" });
+    const username = `qa_user_${chance.string({ length: 8, pool: "abcdefghijklmnopqrstuvwxyz0123456789" })}`;
+    const password = "Test@1234";
+
+    menuPage.acessPim();
+    pimPage.checkEmployeeListPage();
+    pimPage.clickAddEmployee();
+    pimPage.fillEmployeeForm(firstName, middleName, lastName, employeeId);
+    pimPage.saveForm();
+    pimPage.checkEmployeeSaved();
+
+    menuPage.acessAdmin();
+    adminPage.checkSystemUsersPage();
+    adminPage.clickAdd();
+    adminPage.checkAddUserPage();
+    adminPage.fillUserForm({
+      role: "ESS",
+      employeeName: firstName,
+      status: "Enabled",
+      username,
+      password,
+    });
+    adminPage.saveForm();
+    adminPage.searchByUsername(username);
+    adminPage.checkUserInTable(username, "ESS", "Enabled");
+  });
   it("Admin - Job Menu Opens with Subitems", () => {
     adminPage.openJobMenu();
     cy.get(".oxd-dropdown-menu a").contains("Job Titles").should("be.visible");

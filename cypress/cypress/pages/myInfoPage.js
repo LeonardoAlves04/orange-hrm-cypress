@@ -47,6 +47,21 @@ class MyInfoPage {
       .type(lastName);
   }
 
+  checkPersonalDetailsValues(firstName, middleName, lastName) {
+    cy.get(this.selectorsList().firstNameField, { timeout: 10000 }).should(
+      "have.value",
+      firstName,
+    );
+    cy.get(this.selectorsList().middleNameField, { timeout: 10000 }).should(
+      "have.value",
+      middleName,
+    );
+    cy.get(this.selectorsList().lastNameField, { timeout: 10000 }).should(
+      "have.value",
+      lastName,
+    );
+  }
+
   fillEmploymentDetails(
     employeeId,
     OtherId,
@@ -74,9 +89,8 @@ class MyInfoPage {
   fillStatusDetails() {
     cy.get(this.selectorsList().dateCloseButton).click();
     cy.get(this.selectorsList().genericCombobox).eq(0).click({ force: true });
-    cy.get(this.selectorsList().secondItemCombobox).eq(0).click();
-    cy.get(this.selectorsList().genericCombobox).eq(1).click({ force: true });
-    cy.get(this.selectorsList().thirdItemCombobox).eq(0).click();
+    cy.get(this.selectorsList().genericCombobox).eq(1).click();
+    cy.get(this.selectorsList().genericCombobox).eq(2).click({ force: true });
     cy.get(this.selectorsList().radioInput).eq(1).click();
   }
 

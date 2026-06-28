@@ -3,6 +3,7 @@ import LoginPage from "../pages/loginPage";
 import DashboardPage from "../pages/dashboardPage";
 import MenuPage from "../pages/menuPage";
 import PimPage from "../pages/pimPage";
+import MyInfoPage from "../pages/myInfoPage";
 
 const Chance = require("chance");
 
@@ -11,6 +12,7 @@ const loginPage = new LoginPage();
 const dashboardPage = new DashboardPage();
 const menuPage = new MenuPage();
 const pimPage = new PimPage();
+const myInfoPage = new MyInfoPage();
 
 describe("PIM Tests", () => {
   beforeEach(() => {
@@ -69,6 +71,36 @@ describe("PIM Tests", () => {
     pimPage.checkEmployeeSaved();
   });
 
+
+  it("PIM - Edit Employee Personal Details and Validate Persistence", () => {
+    const firstName = `Qa${chance.first()}`;
+    const middleName = chance.string({ length: 5, alpha: true });
+    const lastName = chance.last();
+    const employeeId = chance.string({ length: 6, pool: "0123456789" });
+    const updatedFirstName = `Edit${chance.first()}`;
+    const updatedMiddleName = chance.string({ length: 5, alpha: true });
+    const updatedLastName = chance.last();
+
+    pimPage.clickAddEmployee();
+    pimPage.fillEmployeeForm(firstName, middleName, lastName, employeeId);
+    pimPage.saveForm();
+    pimPage.checkEmployeeSaved();
+    myInfoPage.checkPersonalDetailsPage();
+
+    myInfoPage.fillPersonalDetails(
+      updatedFirstName,
+      updatedMiddleName,
+      updatedLastName
+    );
+    myInfoPage.saveForm();
+    cy.reload();
+    myInfoPage.checkPersonalDetailsPage();
+    myInfoPage.checkPersonalDetailsValues(
+      updatedFirstName,
+      updatedMiddleName,
+      updatedLastName
+    );
+  });
   it("PIM - Add Employee and Search by Employee Id", () => {
     const firstName = chance.first();
     const middleName = chance.name({ middle: true });

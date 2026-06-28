@@ -61,6 +61,24 @@ describe("Recruitment Tests", () => {
     cy.get("[name='firstName']").should("not.have.value", "");
   });
 
+
+  it("Recruitment - Add Candidate - Save and Search in Candidates List", () => {
+    const firstName = `Qa${chance.first()}`;
+    const lastName = chance.last();
+    const email = `qa_candidate_${chance.string({ length: 8, pool: "abcdefghijklmnopqrstuvwxyz0123456789" })}@example.com`;
+
+    cy.visit("recruitment/viewCandidates");
+    recruitmentPage.clickAddCandidate();
+    recruitmentPage.checkAddCandidatePage();
+    recruitmentPage.fillCandidateForm(firstName, lastName, email);
+    recruitmentPage.saveForm();
+    recruitmentPage.checkCandidateSaved();
+
+    cy.visit("recruitment/viewCandidates");
+    recruitmentPage.checkCandidatesPage();
+    recruitmentPage.searchByCandidateName(`${firstName} ${lastName}`);
+    recruitmentPage.checkCandidateInTable(firstName, lastName);
+  });
   it("Recruitment - Add Candidate - Invalid Email Shows Error", () => {
     cy.visit("recruitment/viewCandidates");
     recruitmentPage.clickAddCandidate();

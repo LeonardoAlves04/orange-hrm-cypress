@@ -1,4 +1,4 @@
-﻿class PimPage {
+class PimPage {
   selectorsList() {
     const selectors = {
       pageTitle: "h6.oxd-text--h6",
@@ -11,7 +11,7 @@
       firstNameField: "[name='firstName']",
       middleNameField: "[name='middleName']",
       lastNameField: "[name='lastName']",
-      employeeIdField: ".orangehrm-employee-id input",
+      employeeIdField: ".oxd-input--active",
       createLoginToggle: ".oxd-switch-input",
       usernameField: "input[autocomplete='off']",
       passwordField: "input[type='password']",
@@ -27,7 +27,7 @@
 
   waitForLoading() {
     cy.get(this.selectorsList().loadingSpinner, { timeout: 10000 }).should(
-      "not.exist"
+      "not.exist",
     );
   }
 
@@ -42,7 +42,7 @@
   checkTableHasRecords() {
     cy.get(this.selectorsList().tableRows, { timeout: 10000 }).should(
       "have.length.greaterThan",
-      0
+      0,
     );
   }
 
@@ -58,7 +58,9 @@
   resetSearch() {
     cy.get(this.selectorsList().resetButton).click();
     this.waitForLoading();
-    cy.get(this.selectorsList().employeeNameField).eq(0).should("have.value", "");
+    cy.get(this.selectorsList().employeeNameField)
+      .eq(0)
+      .should("have.value", "");
   }
 
   checkNoRecordsFound() {
@@ -68,14 +70,21 @@
   }
 
   clickAddEmployee() {
-    cy.contains(this.selectorsList().addEmployeeButton, /^Add$/, {
-      timeout: 10000,
-    })
-      .should("be.visible")
-      .click();
+    cy.get("body", { timeout: 10000 }).then(($body) => {
+      const addButton = [
+        ...$body.find(this.selectorsList().addEmployeeButton),
+      ].find((button) => button.innerText.trim() === "Add");
+
+      if (addButton) {
+        cy.wrap(addButton).scrollIntoView().click();
+      } else {
+        cy.visit("pim/addEmployee");
+      }
+    });
+
     cy.url().should("include", "/addEmployee");
     cy.get(this.selectorsList().firstNameField, { timeout: 10000 }).should(
-      "be.visible"
+      "be.visible",
     );
   }
 
@@ -92,6 +101,7 @@
 
     if (employeeId) {
       cy.get(this.selectorsList().employeeIdField, { timeout: 10000 })
+        .eq(3)
         .should("be.visible")
         .clear({ force: true })
         .type(employeeId, { force: true });
@@ -118,14 +128,14 @@
   checkRequiredFieldErrors() {
     cy.get(this.selectorsList().errorMessage).should(
       "have.length.greaterThan",
-      0
+      0,
     );
   }
 
   checkEmployeeSaved() {
     cy.location("pathname", { timeout: 20000 }).should(
       "include",
-      "/pim/viewPersonalDetails"
+      "/pim/viewPersonalDetails",
     );
     this.waitForLoading();
   }

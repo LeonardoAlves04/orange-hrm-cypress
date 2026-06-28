@@ -5,3 +5,4 @@ package-lock.json
 .appdata/
 cypress/screenshots/
 cypress/videos/
+.localappdata/

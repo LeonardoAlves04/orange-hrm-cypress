@@ -15,6 +15,10 @@ class RecruitmentPage {
       firstNameField: "[name='firstName']",
       lastNameField: "[name='lastName']",
       emailField: ".oxd-input-group",
+      autocompleteInput: ".oxd-autocomplete-text-input input",
+      autocompleteOption: ".oxd-autocomplete-dropdown [role='option']",
+      successToast: ".oxd-toast--success",
+      loadingSpinner: ".oxd-loading-spinner",
     };
 
     return selectors;
@@ -77,6 +81,38 @@ class RecruitmentPage {
       "have.length.greaterThan",
       0,
     );
+  }
+
+
+  checkCandidateSaved() {
+    cy.get(this.selectorsList().successToast, { timeout: 10000 }).should(
+      "be.visible",
+    );
+    cy.url({ timeout: 10000 }).should("include", "/recruitment/addCandidate");
+  }
+
+  searchByCandidateName(candidateName) {
+    cy.get(this.selectorsList().autocompleteInput, { timeout: 10000 })
+      .first()
+      .clear()
+      .type(candidateName);
+    cy.get(this.selectorsList().autocompleteOption, { timeout: 10000 })
+      .contains(candidateName)
+      .click();
+    cy.get(this.selectorsList().searchButton).click();
+    cy.get(this.selectorsList().loadingSpinner, { timeout: 10000 }).should(
+      "not.exist",
+    );
+  }
+
+  checkCandidateInTable(firstName, lastName) {
+    cy.get(this.selectorsList().tableRows, { timeout: 10000 })
+      .should("have.length.greaterThan", 0)
+      .then(($rows) => {
+        const rowsText = $rows.text().replace(/\s+/g, " ");
+        expect(rowsText).to.contain(firstName);
+        expect(rowsText).to.contain(lastName);
+      });
   }
 
   checkInvalidEmailError() {
