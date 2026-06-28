@@ -12,7 +12,7 @@ describe("Dashboard Tests", () => {
     loginPage.acessLoginPage();
     loginPage.loginWithUser(
       userData.userSuccess.username,
-      userData.userSuccess.password
+      userData.userSuccess.password,
     );
     dashboardPage.checkDashboardPage();
   });
@@ -57,7 +57,7 @@ describe("Dashboard Tests", () => {
 
   it("Dashboard - Navigate to My Info", () => {
     menuPage.acessMyInfo();
-    cy.url().should("include", "/pim/viewMyDetails");
+    cy.url().should("include", "/pim/viewPersonalDetails");
   });
 
   it("Dashboard - Navigate to Directory", () => {

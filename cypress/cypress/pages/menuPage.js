@@ -2,7 +2,7 @@
   selectorsList() {
     const selectors = {
       menuItem: "a.oxd-main-menu-item",
-      myInfoButton: "[href*='/pim/viewMyDetails']",
+      myInfoButton: "[href='/web/index.php/pim/viewMyDetails']",
       adminButton: "[href*='/admin/viewAdminModule']",
       pimButton: "[href*='/pim/viewPimModule']",
       leaveButton: "[href*='/leave/viewLeaveModule']",
@@ -26,7 +26,7 @@
       .scrollIntoView()
       .click();
     cy.get(this.selectorsList().loadingSpinner, { timeout: 10000 }).should(
-      "not.exist"
+      "not.exist",
     );
   }
 
