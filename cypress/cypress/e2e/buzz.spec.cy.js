@@ -17,7 +17,7 @@ describe("Buzz Tests", () => {
     loginPage.acessLoginPage();
     loginPage.loginWithUser(
       userData.userSuccess.username,
-      userData.userSuccess.password
+      userData.userSuccess.password,
     );
     dashboardPage.checkDashboardPage();
     menuPage.acessBuzz();
@@ -43,7 +43,7 @@ describe("Buzz Tests", () => {
   });
 
   it("Buzz - Create Post and Show in Feed", () => {
-    const postText = `Automated post ${chance.guid()}`;
+    const postText = `Post automatizado teste ${chance.guid()}`;
     buzzPage.typePost(postText);
     buzzPage.submitPost();
     buzzPage.checkPostInFeed(postText);
