@@ -76,19 +76,26 @@ class AdminPage {
     );
   }
 
+  selectDropdownByIndex(dropdownIndex, optionIndex) {
+    cy.get(".oxd-select-text", { timeout: 10000 })
+      .eq(dropdownIndex)
+      .should("be.visible")
+      .click();
+
+    cy.get(".oxd-select-option", { timeout: 10000 })
+      .should("have.length.greaterThan", optionIndex)
+      .eq(optionIndex)
+      .click();
+  }
 
   selectUserRole(role) {
-    cy.contains(".oxd-input-group", "User Role")
-      .find(this.selectorsList().userRoleDropdown)
-      .click();
-    cy.get(".oxd-select-dropdown").contains(role).click();
+    const optionIndex = role === "Admin" ? 1 : 2;
+    this.selectDropdownByIndex(0, optionIndex);
   }
 
   selectStatus(status) {
-    cy.contains(".oxd-input-group", "Status")
-      .find(this.selectorsList().userRoleDropdown)
-      .click();
-    cy.get(".oxd-select-dropdown").contains(status).click();
+    const optionIndex = status === "Enabled" ? 1 : 2;
+    this.selectDropdownByIndex(1, optionIndex);
   }
 
   selectEmployee(employeeName) {
@@ -96,8 +103,10 @@ class AdminPage {
       .should("be.visible")
       .clear()
       .type(employeeName);
+
     cy.get(this.selectorsList().autocompleteOption, { timeout: 10000 })
-      .contains(employeeName)
+      .should("not.contain.text", "Searching")
+      .first()
       .click();
   }
 
@@ -105,10 +114,12 @@ class AdminPage {
     this.selectUserRole(role);
     this.selectEmployee(employeeName);
     this.selectStatus(status);
+
     cy.contains(".oxd-input-group", "Username")
       .find("input")
       .clear()
       .type(username);
+
     cy.get(this.selectorsList().passwordField).eq(0).clear().type(password);
     cy.get(this.selectorsList().passwordField).eq(1).clear().type(password);
   }

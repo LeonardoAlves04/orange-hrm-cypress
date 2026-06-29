@@ -19,7 +19,7 @@ describe("Admin Tests", () => {
     loginPage.acessLoginPage();
     loginPage.loginWithUser(
       userData.userSuccess.username,
-      userData.userSuccess.password
+      userData.userSuccess.password,
     );
     dashboardPage.checkDashboardPage();
     menuPage.acessAdmin();
@@ -57,7 +57,6 @@ describe("Admin Tests", () => {
     adminPage.cancelForm();
   });
 
-
   it("Admin - Create User for Existing Employee and Search by Username", () => {
     const firstName = `Qa${chance.first()}`;
     const middleName = chance.string({ length: 5, alpha: true });
@@ -79,7 +78,7 @@ describe("Admin Tests", () => {
     adminPage.checkAddUserPage();
     adminPage.fillUserForm({
       role: "ESS",
-      employeeName: firstName,
+      employeeName: `${firstName} ${middleName} ${lastName}`,
       status: "Enabled",
       username,
       password,
